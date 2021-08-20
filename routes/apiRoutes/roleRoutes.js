@@ -4,8 +4,11 @@ const db = require(`../../db/connection`);
 // const inputCheck = require(`../../utils/inputCheck`);
 
 // Get all roles
-router.get(`/role`, (req, res) => {
-  const sql = `SELECT * FROM role`;
+router.get(`/roles`, (req, res) => {
+  const sql = `SELECT role.title, role.id, department.name AS department_name, role.salary
+               FROM role
+               LEFT JOIN department
+               ON role.department_id = department.id`;
 
   db.query(sql, (err, rows) => {
     if (err) {

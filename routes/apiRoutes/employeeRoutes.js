@@ -4,8 +4,13 @@ const db = require(`../../db/connection`);
 // const inputCheck = require(`../../utils/inputCheck`);
 
 // Get all employees
-router.get(`/employee`, (req, res) => {
-  const sql = `SELECT * FROM employee`;
+router.get(`/employees`, (req, res) => {
+  const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, employee.manager_id
+               FROM employee
+               LEFT JOIN role
+               ON employee.role_id = role.id
+               LEFT JOIN department
+               ON role.department_id = department.id`;
 
   db.query(sql, (err, rows) => {
     if (err) {
@@ -149,12 +154,24 @@ router.put(`/employee-manager/:id`, (req, res) => {
 //   db.query();
 // });
 
-// View sum of all employee salaries in department
-// router.get(`/employee-salaries`, (req, res) => {
-//   const sql;
-//   const params;
+// View sum of all employee salaries by department
+router.get(`/employee-salaries`, (req, res) => {
+  const sql = `SELECT department.name AS department, SUM(role.salary) AS total_salaries
+               FROM department
+               LEFT JOIN role
+               ON department.id = role.department_id
+               GROUP BY department.name;`;
 
-//   db.query();
-// });
+  db.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: `success`,
+      data: rows
+    });
+  });
+});
 
 module.exports = router;
