@@ -75,13 +75,86 @@ router.delete(`/employee/:id`, (req, res) => {
 });
 
 // Update an employee role
+router.put(`/employee-role/:id`, (req, res) => {
+  // const errors = inputCheck(req.body, `role_id`);
+  // if (errors) {
+  //   res.status(400).json({ error: errors });
+  //   return;
+  // }
+
+  const sql = `UPDATE employee SET role_id = ? 
+               WHERE id = ?`;
+  const params = [req.body.role_id, req.params.id];
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+    } else if (!result.affectedRows) {
+      res.json({
+        message: `Employee not found`
+      });
+    } else {
+      res.json({
+        message: `success`,
+        data: req.body,
+        changes: result.affectedRows
+      });
+    }
+  });
+});
+
 
 // Update an employee manager
+router.put(`/employee-manager/:id`, (req, res) => {
+  // const errors = inputCheck(req.body, `manager_id`);
+  // if (errors) {
+  //   res.status(400).json({ error: errors });
+  //   return;
+  // }
+
+  const sql = `UPDATE employee SET manager_id = ? 
+               WHERE id = ?`;
+  const params = [req.body.manager_id, req.params.id];
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+    } else if (!result.affectedRows) {
+      res.json({
+        message: `Employee not found`
+      });
+    } else {
+      res.json({
+        message: `success`,
+        data: req.body,
+        changes: result.affectedRows
+      });
+    }
+  });
+});
 
 // View employees by manager
+// router.get(`/employee-manager`, (req, res) => {
+//   const sql;
+//   const params;
+
+//   db.query();
+// });
 
 // View employees by department
+// router.get(`/employee-department`, (req, res) => {
+//   const sql;
+//   const params;
+
+//   db.query();
+// });
 
 // View sum of all employee salaries in department
+// router.get(`/employee-salaries`, (req, res) => {
+//   const sql;
+//   const params;
+
+//   db.query();
+// });
 
 module.exports = router;
