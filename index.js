@@ -71,16 +71,16 @@ const promptUser = input => {
         userChoice.findAllEmployees();
         break;
       case 'Add a department':
-        userChoice.createDepartment();
+        userChoice.createDepartment(name); // this will not be the actual argument name
         break;
       case 'Add a role':
-        userChoice.createRole();
+        userChoice.createRole(title, salary, department_id); // these will not be the actual argument names
         break;
       case 'Add an employee':
-        userChoice.createEmployee();
+        userChoice.createEmployee(first_name, last_name, role_id); // these will not be the actual argument names
         break;
       case 'Update an employee role':
-        userChoice.updateEmployeeRole();
+        userChoice.updateEmployeeRole(role_id, id); // these will not be the actual argument names
         break;
       default:
     }
