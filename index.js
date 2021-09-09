@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const db = require('./db/connection');
+const Query = require('./db/query');
 
 /*
 USER STORY
@@ -62,25 +62,25 @@ const promptUser = input => {
   .then(inputData => {
     switch (inputData.mainMenu) {
       case 'View all departments':
-        // do something
+        Query.findAllDepartments();
         break;
       case 'View all roles':
-        // do something
+        Query.findAllRoles();
         break;
       case 'View all employees':
-        // do something
+        Query.findAllEmployees();
         break;
       case 'Add a department':
-        // do something
+        Query.createDepartment();
         break;
       case 'Add a role':
-        // do something
+        Query.createRole();
         break;
       case 'Add an employee':
-        // do something
+        Query.createEmployee();
         break;
       case 'Update an employee role':
-        // do something
+        Query.updateEmployeeRole();
         break;
       default:
     }
