@@ -56,7 +56,7 @@ const queries = {
       for (let i = 0; i < arr.length; i++) {
         list.push(arr[i].title);
       }
-    })
+    });
     return list;
   },
 
@@ -74,14 +74,25 @@ const queries = {
   // return array of manager names
   listManagers() {
     const list = [];
-    // ...
+    const sql = `SELECT CONCAT(first_name, ' ', last_name) AS name FROM employee WHERE manager_id IS NULL`;
+    db.query(sql, (err, rows) => {
+      if (err) {
+        console.error('Error.');
+        return;
+      }
+      const arr = JSON.parse(JSON.stringify(rows));
+      for (let i = 0; i < arr.length; i++) {
+        list.push(arr[i].name);
+      }
+    });
     return list;
   },
   
   // return array of employee names
   listEmployees() {
     const list = [];
-    // ...
+    const sql =`SELECT CONCAT(first_name, ' ', last_name) AS name FROM employee`;
+    
     return list;
   },
 
