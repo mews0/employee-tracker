@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const userChoice = require('./db/query');
+const choices = require('./choices');
 
 /*
 USER STORY
@@ -56,7 +57,7 @@ const promptUser = input => {
       type: 'list',
       name: 'mainMenu',
       message: 'Please select one of the following:',
-      choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role']
+      choices: ['View all departments', 'View all roles', 'View all employees', 'Add new department', 'Add new role', 'Add new employee', 'Update an employee role']
     }
   ])
   .then(inputData => {
@@ -70,18 +71,107 @@ const promptUser = input => {
       case 'View all employees':
         userChoice.findAllEmployees();
         break;
-      case 'Add a department':
-        userChoice.createDepartment(name); // this will not be the actual argument name
-        break;
-      case 'Add a role':
-        userChoice.createRole(title, salary, department_id); // these will not be the actual argument names
-        break;
-      case 'Add an employee':
-        userChoice.createEmployee(first_name, last_name, role_id); // these will not be the actual argument names
-        break;
+      case 'Add new department':
+        // prompt user for department name
+        inquirer
+          .prompt([
+            {
+              type: 'input',
+              name: 'department',
+              message: 'Please enter new department name:'
+              // *** VALIDATE USER INPUT ***
+            }
+          ])
+          .then(answer => {
+            // add new department to the database
+            userChoice.createDepartment(answer.department);
+          });
+          break;
+      case 'Add new role':
+        // prompt user for title, salary, department id
+        inquirer
+          .prompt([
+            {
+              type: 'input',
+              name: 'role',
+              message: 'Please enter title:'
+              // *** VALIDATE USER INPUT ***
+            },
+            {
+              type: 'number',
+              name: 'salary',
+              message: 'Please enter salary:'
+              // *** VALIDATE USER INPUT ***
+            },
+            {
+              type: 'list',
+              name: 'department',
+              message: 'Please select a department:',
+              choices: choices.listDepartments() // *** CALL FUNCTION THAT RETURNS AN ARRAY OF DEPARTMENTS FROM DATABASE ***
+            }
+          ])
+          .then(answers => {
+            console.log(answers);
+            // add new role to the database
+            // userChoice.createRole(answers.role, answers.salary, answers.department); // *** LAST ARGUMENT NEEDS TO REFERENCE DEPARTMENT ID ***
+          });
+          break;
+      case 'Add new employee':
+        // prompt user for first name, last name, role, manager
+        inquirer
+          .prompt([
+            {
+              type: 'input',
+              name: 'firstName',
+              message: 'Please enter first name:'
+              // *** VALIDATE USER INPUT ***
+            },
+            {
+              type: 'input',
+              name: 'lastName',
+              message: 'Please enter last name:'
+              // *** VALIDATE USER INPUT ***
+            },
+            {
+              type: 'list',
+              name: 'title',
+              message: 'Please select a title:',
+              choices: ['a', 'b', 'c', 'd', 'e'] // *** CALL FUNCTION THAT RETURNS AN ARRAY OF TITLES FROM DATABASE ***
+            },
+            {
+              type: 'list',
+              name: 'manager',
+              message: 'Please select a manager:',
+              choices: ['a', 'b', 'c', 'd', 'e'] // *** CALL FUNCTION THAT RETURNS AN ARRAY OF MANAGERS FROM DATABASE ***
+            }
+          ])
+          .then(answers => {
+            console.log(answers);
+            // userChoice.createEmployee(first_name, last_name, role, manager); // these will not be the actual argument names
+          });
+          break;
       case 'Update an employee role':
-        userChoice.updateEmployeeRole(role_id, id); // these will not be the actual argument names
-        break;
+        // prompt user for employee, role
+        inquirer
+          .prompt([
+            {
+              type: 'list',
+              name: 'employee',
+              message: 'Please select an employee:',
+              choices: ['a', 'b', 'c', 'd', 'e'] // *** CALL FUNCTION THAT RETURNS AN ARRAY OF EMPLOYEES FROM DATABASE *** 
+            },
+            {
+              type: 'list',
+              name: 'title',
+              message: 'Please select a title:',
+              choices: ['a', 'b', 'c', 'd', 'e'] // *** CALL FUNCTION THAT RETURNS AN ARRAY OF TITLES FROM DATABASE ***
+            }
+          ])
+          .then(answers => {
+            console.log(answers);
+            // userChoice.updateEmployeeRole(role_id, id); // these will not be the actual argument names
+          });
+          break;
       default:
     }
   });
@@ -89,7 +179,7 @@ const promptUser = input => {
 
 promptUser()
   .then(input => {
-    // return something
+    // *** RETURN SOMETHING ***
   })
   .catch(err => {
     console.log(err);
