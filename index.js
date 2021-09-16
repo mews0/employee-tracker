@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
-const userChoice = require('./db/query');
-const choices = require('./choices');
+const queries = require('./db/queries');
 
 /*
 USER STORY
@@ -63,13 +62,13 @@ const promptUser = input => {
   .then(inputData => {
     switch (inputData.mainMenu) {
       case 'View all departments':
-        userChoice.findAllDepartments();
+        queries.findAllDepartments();
         break;
       case 'View all roles':
-        userChoice.findAllRoles();
+        queries.findAllRoles();
         break;
       case 'View all employees':
-        userChoice.findAllEmployees();
+        queries.findAllEmployees();
         break;
       case 'Add new department':
         // prompt user for department name
@@ -78,13 +77,19 @@ const promptUser = input => {
             {
               type: 'input',
               name: 'department',
-              message: 'Please enter new department name:'
-              // *** VALIDATE USER INPUT ***
+              message: 'Please enter new department name:',
+              validate: input => {
+                if (input) {
+                  return true;
+                } else {
+                  console.log('You must enter a department name!');
+                }
+              }
             }
           ])
           .then(answer => {
             // add new department to the database
-            userChoice.createDepartment(answer.department);
+            queries.createDepartment(answer.department);
           });
           break;
       case 'Add new role':
@@ -94,26 +99,43 @@ const promptUser = input => {
             {
               type: 'input',
               name: 'role',
-              message: 'Please enter title:'
-              // *** VALIDATE USER INPUT ***
+              message: 'Please enter title:',
+              validate: input => {
+                if (input) {
+                  return true;
+                } else {
+                  console.log('You must enter a title!');
+                }
+              }
             },
             {
-              type: 'number',
+              type: 'input',
               name: 'salary',
-              message: 'Please enter salary:'
-              // *** VALIDATE USER INPUT ***
+              message: 'Please enter salary:',
+              validate: input => {
+                if (input > 0) {
+                  return true;
+                } else {
+                  console.log(' You must enter a number greater than 0!');
+                }
+              }
             },
             {
               type: 'list',
               name: 'department',
               message: 'Please select a department:',
-              choices: choices.listDepartments() // *** CALL FUNCTION THAT RETURNS AN ARRAY OF DEPARTMENTS FROM DATABASE ***
+              // call function that returns an array of departments from the database
+              choices: queries.listDepartments()
             }
           ])
           .then(answers => {
-            console.log(answers);
-            // add new role to the database
-            // userChoice.createRole(answers.role, answers.salary, answers.department); // *** LAST ARGUMENT NEEDS TO REFERENCE DEPARTMENT ID ***
+            console.log(answers); // e.g., answers = { role: 'Business Systems Analyst', salary: '50000', department: 'IT' }
+            // add new role to the database: 
+            /*
+            INSERT INTO role
+            VALUES (answers.role, answers.salary, (SELECT id FROM department WHERE name = answers.department))
+            */
+            // queries.createRole(answers.role, answers.salary, answers.department);
           });
           break;
       case 'Add new employee':
@@ -123,31 +145,43 @@ const promptUser = input => {
             {
               type: 'input',
               name: 'firstName',
-              message: 'Please enter first name:'
-              // *** VALIDATE USER INPUT ***
+              message: 'Please enter first name:',
+              validate: input => {
+                if (input) {
+                  return true;
+                } else {
+                  console.log('You must enter a first name!');
+                }
+              }
             },
             {
               type: 'input',
               name: 'lastName',
-              message: 'Please enter last name:'
-              // *** VALIDATE USER INPUT ***
+              message: 'Please enter last name:',
+              validate: input => {
+                if (input) {
+                  return true;
+                } else {
+                  console.log('You must enter a last name!');
+                }
+              }
             },
             {
               type: 'list',
               name: 'title',
               message: 'Please select a title:',
-              choices: ['a', 'b', 'c', 'd', 'e'] // *** CALL FUNCTION THAT RETURNS AN ARRAY OF TITLES FROM DATABASE ***
+              choices: queries.listTitles()
             },
             {
               type: 'list',
               name: 'manager',
               message: 'Please select a manager:',
-              choices: ['a', 'b', 'c', 'd', 'e'] // *** CALL FUNCTION THAT RETURNS AN ARRAY OF MANAGERS FROM DATABASE ***
+              choices: queries.listManagers()
             }
           ])
           .then(answers => {
             console.log(answers);
-            // userChoice.createEmployee(first_name, last_name, role, manager); // these will not be the actual argument names
+            // queries.createEmployee(first_name, last_name, role, manager); // these will not be the actual argument names
           });
           break;
       case 'Update an employee role':
@@ -158,18 +192,18 @@ const promptUser = input => {
               type: 'list',
               name: 'employee',
               message: 'Please select an employee:',
-              choices: ['a', 'b', 'c', 'd', 'e'] // *** CALL FUNCTION THAT RETURNS AN ARRAY OF EMPLOYEES FROM DATABASE *** 
+              choices: queries.listEmployees()
             },
             {
               type: 'list',
               name: 'title',
               message: 'Please select a title:',
-              choices: ['a', 'b', 'c', 'd', 'e'] // *** CALL FUNCTION THAT RETURNS AN ARRAY OF TITLES FROM DATABASE ***
+              choices: queries.listTitles()
             }
           ])
           .then(answers => {
             console.log(answers);
-            // userChoice.updateEmployeeRole(role_id, id); // these will not be the actual argument names
+            // queries.updateEmployeeRole(role_id, id); // these will not be the actual argument names
           });
           break;
       default:
