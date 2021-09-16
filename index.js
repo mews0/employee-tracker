@@ -71,7 +71,7 @@ const promptUser = input => {
         queries.findAllEmployees();
         break;
       case 'Add new department':
-        // prompt user for department name
+        // prompt user for new department name
         inquirer
           .prompt([
             {
@@ -130,12 +130,12 @@ const promptUser = input => {
           ])
           .then(answers => {
             console.log(answers); // e.g., answers = { role: 'Business Systems Analyst', salary: '50000', department: 'IT' }
-            // add new role to the database: 
+            // *** ADD NEW ROLE TO THE DATABASE *** 
             /*
             INSERT INTO role
             VALUES (answers.role, answers.salary, (SELECT id FROM department WHERE name = answers.department))
             */
-            // queries.createRole(answers.role, answers.salary, answers.department);
+            // queries.createRole(answers.role, answers.salary, department.id);
           });
           break;
       case 'Add new employee':
@@ -170,18 +170,25 @@ const promptUser = input => {
               type: 'list',
               name: 'title',
               message: 'Please select a title:',
+              // call function that returns an array of titles from the database
               choices: queries.listTitles()
             },
             {
               type: 'list',
               name: 'manager',
               message: 'Please select a manager:',
+              // call function that returns an array of manager names from the database
               choices: queries.listManagers()
             }
           ])
           .then(answers => {
-            console.log(answers);
-            // queries.createEmployee(first_name, last_name, role, manager); // these will not be the actual argument names
+            console.log(answers); // e.g., answers = {firstName: 'John', lastName: 'Doe', title: 'Worker', manager: 'Boss Man'}
+            // *** ADD NEW EMPLOYEE TO THE DATABASE *** 
+            /*
+            INSERT INTO employee
+            VALUES (answers.firstName, answers.lastName, (SELECT id FROM role WHERE title = answers.title), (SELECT id FROM employee WHERE CONCAT(first_name, last_name) AS name = answers.manager))
+            */
+            // queries.createEmployee(first_name, last_name, role, manager);
           });
           break;
       case 'Update an employee role':
@@ -202,7 +209,13 @@ const promptUser = input => {
             }
           ])
           .then(answers => {
-            console.log(answers);
+            console.log(answers); // e.g., answers = {employee: 'Joe Blow', title: 'Worker'}
+            // *** UPDATE AN EMPLOYEE ROLE IN THE DATABASE *** 
+            /*
+            UPDATE employee
+            SET role_id = (SELECT id FROM role WHERE title = answers.title)
+            WHERE id = (SELECT id FROM employee WHERE CONCAT(first_name, last_name) AS name = answers.manager)
+            */
             // queries.updateEmployeeRole(role_id, id); // these will not be the actual argument names
           });
           break;
