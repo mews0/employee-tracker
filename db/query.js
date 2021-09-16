@@ -1,36 +1,37 @@
-const db = require(`./connection`);
+const db = require('./connection');
+const cTable = require('console.table');
 
-let userChoice = {
+const userChoice = {
   findAllDepartments() {
-    const sql = `SELECT name, id FROM department`;
+    const sql = `SELECT id, name FROM department`;
     db.query(sql, (err, rows) => {
       if (err) {
         console.log('Error.');
         return;
       }
-      console.log(rows);
+      console.table(JSON.parse(JSON.stringify(rows)));
     });
   },
 
   findAllRoles() {
-    const sql = `SELECT role.title, role.id, department.name AS department_name, role.salary FROM role LEFT JOIN department ON role.department_id = department.id`;
+    const sql = `SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id`;
     db.query(sql, (err, rows) => {
       if (err) {
         console.log('Error.');
         return;
       }
-      console.log(rows);
+      console.table(JSON.parse(JSON.stringify(rows)));
     });
   },
 
   findAllEmployees() {
-    const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, employee.manager_id FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id`
+    const sql = `SELECT emp.id, emp.first_name, emp.last_name, role.title, department.name AS department, role.salary, CONCAT(mgr.first_name, ' ', mgr.last_name) AS manager FROM employee emp LEFT JOIN employee mgr ON emp.manager_id = mgr.id LEFT JOIN role ON emp.role_id = role.id LEFT JOIN department ON role.department_id = department.id`
     db.query(sql, (err, rows) => {
       if (err) {
         console.log('Error.');
         return;
       }
-      console.log(rows);
+      console.table(JSON.parse(JSON.stringify(rows)));
     });
   },
 
@@ -58,7 +59,7 @@ let userChoice = {
     });
   },
 
-  createEmployee(first_name, last_name, role_id) {
+  createEmployee(first_name, last_name, role_id, manager_id) {
     const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
     const params = [first_name, last_name, role_id, manager_id]
     db.query(sql, params, (err, result) => {
