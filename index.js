@@ -60,7 +60,7 @@ const promptUser = input => {
           .prompt([
             {
               type: 'input',
-              name: 'role',
+              name: 'title',
               message: 'Please enter title:',
               validate: input => {
                 if (input) {
@@ -91,13 +91,8 @@ const promptUser = input => {
             }
           ])
           .then(answers => {
-            console.log(answers); // e.g., answers = { role: 'Business Systems Analyst', salary: '50000', department: 'IT' }
-            // *** ADD NEW ROLE TO THE DATABASE *** 
-            /*
-            INSERT INTO role
-            VALUES (answers.role, answers.salary, (SELECT id FROM department WHERE name = answers.department))
-            */
-            // queries.createRole(answers.role, answers.salary, department.id);
+            // add new role to the database 
+            queries.createRole(answers.title, answers.salary, answers.department);
           });
           break;
       case 'Add new employee':

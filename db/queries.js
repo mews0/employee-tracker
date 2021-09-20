@@ -138,9 +138,9 @@ const queries = {
   },
 
   // create new record in role table
-  createRole(title, salary, department_id) {
-    const sql = `INSERT INTO role (title, salary, department_id) VALUES (?,?,?)`;
-    const params = [title, salary, department_id];
+  createRole(title, salary, department) {
+    const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, (SELECT id FROM department WHERE name = ?))`;
+    const params = [title, salary, department];
     db.query(sql, params, (err, result) => {
       if (err) {
         console.error('Error.');
