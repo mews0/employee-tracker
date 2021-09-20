@@ -102,10 +102,25 @@ const queries = {
       for (let i = 0; i < arr.length; i++) {
         list.push(arr[i].name);
       }
-      console.log(list); // *** LIST IS DISPLAYING AS INTENDED HERE ***
+      console.log(list); /* The variable `list` is displaying employees as intended here:
+      [
+        'Cosgrove Shumway',
+        'Doink Ahanahue',
+        'Legume Duprix',
+        'Grunky Peep',
+        'Strunk Flugget',
+        'Stumptavian Roboclick',
+        'Vagonius Thicket-Suede',
+        'Marmadune Shazbot',
+        'Faux Doadles',
+        'Snarf Mintz-Plasse'
+      ]
+      */
     });
-    console.log(list); /* LIST IS NOT DISPLAYING AS INTENDED HERE, AND I AM STRUGGLING TO FIGURE OUT WHY.
-    LISTMANAGERS() WORKS, AND IT IS IDENTICAL TO LISTEMPLOYEES() EXCEPT FOR THE VALUE IN SQL. */ 
+    console.log(list); /* The variable `list` is not displaying employees as intended here: []
+    I do not understand why.
+    The function `listManagers()` displays employees as intended, and it is identical to the function `listEmployees()`,
+    except for each value in the respective `sql` variables. */ 
     return list;
   },
 
