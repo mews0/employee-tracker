@@ -15,6 +15,7 @@ A command-line application that manages a company's employee database.
 Clone the application to your local machine.
 
 ## Usage
+[Video](https://watch.screencastify.com/v/gLmRZhSFOsHxkcdqmnbF)
 1. If necessary, update seeds.sql with your data.
 2. Open command-line interface and enter the following:
 3. `mysql -u root -p`
