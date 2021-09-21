@@ -151,7 +151,7 @@ const promptUser = input => {
               type: 'list',
               name: 'employee',
               message: 'Please select an employee:',
-              choices: queries.listEmployees()
+              choices: queries.listEmployees() // This query returns an empty array (see lines 92 - 125 of ./db/queries.js).
             },
             {
               type: 'list',
@@ -161,14 +161,9 @@ const promptUser = input => {
             }
           ])
           .then(answers => {
-            console.log(answers); // e.g., answers = {employee: 'Joe Blow', title: 'Worker'}
-            // *** UPDATE AN EMPLOYEE ROLE IN THE DATABASE *** 
-            /*
-            UPDATE employee
-            SET role_id = (SELECT id FROM role WHERE title = answers.title)
-            WHERE id = (SELECT id FROM employee WHERE CONCAT(first_name, last_name) AS name = answers.manager)
-            */
-            // queries.updateEmployeeRole(role_id, id); // these will not be the actual argument names
+            console.log(answers);
+            // update an employee role in the database 
+            queries.updateEmployeeRole(answers.title, answers.name);
           });
           break;
       default:

@@ -180,9 +180,9 @@ const queries = {
   },
 
   // update a role in employee table
-  updateEmployeeRole(role_id, id) {
-    const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
-    const params = [role_id, id]
+  updateEmployeeRole(title, name) {
+    const sql = `UPDATE employee SET role_id = (SELECT id FROM role WHERE title = ?) WHERE id = (SELECT id FROM employee WHERE CONCAT(first_name, last_name) = ?)`;
+    const params = [title, name]
     db.query(sql, params, (err, result) => {
       if (err) {
         console.error('Error.');
