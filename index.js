@@ -139,13 +139,8 @@ const promptUser = input => {
             }
           ])
           .then(answers => {
-            console.log(answers); // e.g., answers = {firstName: 'John', lastName: 'Doe', title: 'Worker', manager: 'Boss Man'}
-            // *** ADD NEW EMPLOYEE TO THE DATABASE *** 
-            /*
-            INSERT INTO employee
-            VALUES (answers.firstName, answers.lastName, (SELECT id FROM role WHERE title = answers.title), (SELECT id FROM employee WHERE CONCAT(first_name, last_name) AS name = answers.manager))
-            */
-            // queries.createEmployee(first_name, last_name, role, manager);
+            // add new employee to the database
+            queries.createEmployee(answers.firstName, answers.lastName, answers.title, answers.manager);
           });
           break;
       case 'Update an employee role':

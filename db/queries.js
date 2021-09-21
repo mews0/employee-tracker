@@ -151,9 +151,25 @@ const queries = {
   },
 
   // create new record in employee table
-  createEmployee(first_name, last_name, role_id, manager_id) {
-    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
-    const params = [first_name, last_name, role_id, manager_id]
+  createEmployee(firstName, lastName, title, manager) {
+    
+    /*
+    The below queries commented out return results as intended:
+    =================================================
+    const sql = `SELECT id FROM role WHERE title = ?`;
+    const params = title;
+    
+    const sql = `SELECT id FROM employee WHERE CONCAT(first_name, ' ', last_name) = ?`;
+    const params = manager;
+
+    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, 10, 1)`;
+    const params = [firstName, lastName, title, manager];
+
+    Why then, does the query below return an error?
+    */
+
+    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, (SELECT id FROM role WHERE title = ?), (SELECT id FROM employee WHERE CONCAT(first_name, ' ', last_name) = ?))`;
+    const params = [firstName, lastName, title, manager];
     db.query(sql, params, (err, result) => {
       if (err) {
         console.error('Error.');
