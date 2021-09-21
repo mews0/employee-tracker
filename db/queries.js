@@ -133,7 +133,7 @@ const queries = {
         console.error('Error.');
         return;
       }
-      console.log(result);
+      console.log('New department created.');
     });
   },
 
@@ -146,7 +146,7 @@ const queries = {
         console.error('Error.');
         return;
       }
-      console.log(result);
+      console.log('New role created.');
     });
   },
 
@@ -155,7 +155,7 @@ const queries = {
     
     /*
     The below queries commented out return results as intended:
-    =================================================
+    ===========================================================
     const sql = `SELECT id FROM role WHERE title = ?`;
     const params = title;
     
@@ -175,7 +175,7 @@ const queries = {
         console.error('Error.');
         return;
       }
-      console.log(result);
+      console.log('New employee created.');
     });
   },
 
@@ -189,7 +189,7 @@ const queries = {
       } else if (!result.affectedRows) {
         console.log('Employee not found.');
       } else {
-        console.log(result);
+        console.log('Employee role updated.');
       }
     });
   }
