@@ -171,10 +171,4 @@ const promptUser = input => {
   });
 };
 
-promptUser()
-  .then(input => {
-    // *** RETURN SOMETHING ***
-  })
-  .catch(err => {
-    console.log(err);
-  });
+promptUser();
